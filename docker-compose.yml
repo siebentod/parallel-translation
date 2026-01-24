@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${PROJECT_NAME}:latest
+    container_name: ${PROJECT_NAME}-app
+    restart: unless-stopped
+    ports:
+      - "${EXTERNAL_PORT}:3000"
+    environment:
+      - NODE_ENV=production
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
