@@ -1,5 +1,5 @@
 [package]
-name = "app"
+name = "ParallelTranslation"
 version = "0.1.0"
 description = "ParallelTranslation"
 authors = ["you"]
@@ -18,23 +18,9 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2.0.2", features = [] }
 
 [dependencies]
-notify = "6.0"
-lazy_static = "1.4"
-tokio = { version = "1.0", features = ["time"] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-log = "0.4"
 tauri = { version = "2.9", features = ["devtools"] }
-regex = "1.10"
 tauri-plugin-dialog = "2"
-everything-rs = "0.1.10"
-chrono = "0.4"
 tauri-plugin-store = "2"
-file-id = "0.2.2"
-fs2 = "0.4"
 tauri-plugin-fs = "2"
-lopdf = "0.32"
-rayon = "1.7"
-xmp_toolkit = "1.10"
-anyhow = "1.0"
-rand = "0.8"
