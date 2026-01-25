@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useTextStore } from 'src/hooks/useTextStore';
 import { useModalStore } from 'src/hooks/useModalStore';
 
@@ -16,13 +15,9 @@ const statusPriority = {
   Готово: 4,
 };
 
-interface TranslationsTableProps {
-  setTableOpened: (value: boolean) => void;
-}
-
-function TranslationsTable({ setTableOpened }: TranslationsTableProps) {
+function TranslationsTable() {
   const open = useModalStore((state) => state.open);
-  const { isDataLoaded, openTranslation } = useTextStore();
+  const { isDataLoaded } = useTextStore();
   const translationsObj = useTextStore((state) => state.translations);
   const translationSets = Object.values(translationsObj);
 
@@ -35,8 +30,8 @@ function TranslationsTable({ setTableOpened }: TranslationsTableProps) {
 
     return [...translationSets].sort((a, b) => {
       // Сначала сортируем по статусу
-      const statusA = statusPriority[a.status] || 999;
-      const statusB = statusPriority[b.status] || 999;
+      const statusA = a.status ? statusPriority[a.status as keyof typeof statusPriority] : 999;
+      const statusB = b.status ? statusPriority[b.status as keyof typeof statusPriority] : 999;
 
       if (statusA !== statusB) {
         return statusA - statusB;
@@ -100,18 +95,6 @@ function TranslationsTable({ setTableOpened }: TranslationsTableProps) {
       }
     });
   }, []);
-
-  const handleOpenTranslation = useCallback(
-    async (baseName: string, language: string) => {
-      try {
-        await openTranslation(baseName, language);
-        setTableOpened(false);
-      } catch (error) {
-        toast.error('Ошибка открытия перевода');
-      }
-    },
-    [openTranslation, setTableOpened]
-  );
 
   if (!isDataLoaded) {
     return (
@@ -186,7 +169,6 @@ function TranslationsTable({ setTableOpened }: TranslationsTableProps) {
                 <Row
                   key={translationSet.baseName}
                   translationSet={translationSet}
-                  onOpenTranslation={handleOpenTranslation}
                 />
               ))
             )}

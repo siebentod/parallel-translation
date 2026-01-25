@@ -14,6 +14,7 @@ export default defineConfig({
       service: fileURLToPath(new URL('./src/service', import.meta.url)),
       hooks: fileURLToPath(new URL('./src/hooks', import.meta.url)),
       lib: fileURLToPath(new URL('./src/lib', import.meta.url)),
+      pages: fileURLToPath(new URL('./src/pages', import.meta.url)),
     },
   },
 });

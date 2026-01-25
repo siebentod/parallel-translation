@@ -1,22 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import Split from 'react-split';
 import MdEditor from 'src/components/md-editor';
 import HomeButton from 'src/components/ui/home-button';
 import { useTextStore } from 'src/hooks/useTextStore';
 
-interface TranslationSectionProps {
-  setTableOpened: (value: boolean) => void;
-}
-
-export default function TranslationSection({
-  setTableOpened,
-}: TranslationSectionProps) {
-  const closeCurrentTranslation = useTextStore(
-    (state) => state.closeCurrentTranslation
-  );
-
+export default function TranslationSection() {
+  const navigate = useNavigate();
+  const { closeCurrentTranslation } = useTextStore();
+  
   const handleToHome = () => {
     closeCurrentTranslation();
-    setTableOpened(true);
+    navigate('/');
   };
 
   return (

@@ -1,27 +1,22 @@
-import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-import Table from 'src/components/table';
 import Modals from 'src/components/modals';
-import About from 'src/components/about';
-import TranslationSection from 'src/components/translation-section';
+import HomePage from 'src/pages/HomePage';
+import TranslationPage from 'src/pages/TranslationPage';
 
 function App() {
-  const [tableOpened, setTableOpened] = useState(true);
-
   return (
     <div className="relative w-fit mx-auto">
       <div className="mx-auto font-inter max-h-screen relative">
         <div className="pt-4">
-          {tableOpened ? (
-            <Table setTableOpened={setTableOpened} />
-          ) : (
-            <TranslationSection setTableOpened={setTableOpened} />
-          )}
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/translation/:basename/:language" element={<TranslationPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
         </div>
       </div>
-
-      {tableOpened && <About />}
 
       <Modals />
 
@@ -45,3 +40,5 @@ function App() {
 }
 
 export default App;
+
+

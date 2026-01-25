@@ -4,21 +4,14 @@ import BinSvg from 'assets/icons/Bin.svg?react';
 import Plus2Svg from 'assets/icons/Plus2.svg?react';
 import EditSvg from 'assets/icons/Edit.svg?react';
 import { Translation } from 'src/store/text/types';
+import { Link } from 'react-router-dom';
 
 interface TranslationRowProps {
   translationSet: Translation;
-  onOpenTranslation: (baseName: string, language: string) => void;
 }
 
-function TranslationRow({
-  translationSet,
-  onOpenTranslation,
-}: TranslationRowProps) {
+function TranslationRow({ translationSet }: TranslationRowProps) {
   const open = useModalStore((state) => state.open);
-
-  const handleLanguageClick = (language: string) => {
-    onOpenTranslation(translationSet.baseName, language);
-  };
 
   const renderLanguageTags = () => {
     const languages = translationSet.availableLanguages;
@@ -26,14 +19,14 @@ function TranslationRow({
     return (
       <div className="flex flex-wrap gap-1 items-center">
         {languages.map((lang: string) => (
-          <button
+          <Link
+            to={`/translation/${translationSet.baseName}/${lang}`}
             key={lang}
-            onClick={() => handleLanguageClick(lang)}
             className="px-2 py-1 text-xs font-bold bg-red-bg text-black rounded-sm hover:bg-red-bg-hover transition-colors"
             title={`Открыть перевод на ${lang}`}
           >
             {lang}
-          </button>
+          </Link>
         ))}
         <Plus2Svg className="w-5 h-5 p-0.5 ml-1 rounded-full bg-red-bg text-black hover:bg-red-200" />
       </div>
