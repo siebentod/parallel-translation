@@ -27,17 +27,25 @@ export default function MdEditor({
   const saveCurrentTranslation = useTextStore(
     (state) => state.saveCurrentTranslation
   );
-  const baseName = useTextStore((state) => state.currentTranslation.baseName) as string;
+  const baseName = useTextStore(
+    (state) => state.currentTranslation.baseName
+  ) as string;
   const isDataLoaded = useTextStore(
     (state) => state.currentTranslation.isDataLoaded
   );
+  const lastPosition = useTextStore((state) =>
+    editorType === 'original'
+      ? state.translations[baseName]?.languages?.original?.lastPosition
+      : state.translations[baseName]?.languages?.[textLanguage]?.lastPosition
+  );
+
   const value = textContent;
   const onChange = updateFn;
   const editorId = editorType === 'original' ? 'left' : 'right';
   const partnerId = editorType === 'original' ? 'right' : 'left';
   const language = textLanguage;
 
-  // Автосохранение для оригинального файла
+  // Автосохранение
   useAutoSave(
     textContent || '',
     async () => {
@@ -54,10 +62,11 @@ export default function MdEditor({
     partnerId,
     baseName,
     language,
+    initialLine: Number(lastPosition) || 0,
   });
 
   return (
-    <div className="overflow-y-auto">
+    <div className="overflow-y-auto" id={editorId}>
       <CodeMirror
         value={value}
         onChange={(value) => onChange(value)}

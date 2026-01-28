@@ -28,7 +28,7 @@ function TranslationRow({ translationSet }: TranslationRowProps) {
             {lang}
           </Link>
         ))}
-        <Plus2Svg className="w-5 h-5 p-0.5 ml-1 rounded-full bg-red-bg text-black hover:bg-red-200" />
+        <Plus2Svg onClick={() => openCreateLanguage(translationSet)} className="w-5 h-5 p-0.5 ml-1 rounded-full bg-red-bg text-black hover:bg-red-200" />
       </div>
     );
   };
@@ -41,6 +41,16 @@ function TranslationRow({ translationSet }: TranslationRowProps) {
       hour: '2-digit',
       minute: '2-digit',
     });
+  };
+  
+  const getCreated = () => {
+    return new Date(translationSet?.dateCreated)?.toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }) || '';
   };
 
   const openRenameTranslation = (translationSet: Translation) => {
@@ -61,6 +71,12 @@ function TranslationRow({ translationSet }: TranslationRowProps) {
     open('delete', {
       name: translationSet.baseName,
       value: translationSet.shownName,
+    });
+  };
+
+  const openCreateLanguage = (translationSet: Translation) => {
+    open('create-new-language', {
+      name: translationSet.baseName,
     });
   };
 
@@ -100,8 +116,11 @@ function TranslationRow({ translationSet }: TranslationRowProps) {
       <td className="py-3 px-4 border-b border-border-dark">
         {renderLanguageTags()}
       </td>
-      <td className="py-3 px-4 border-b border-r border-border-dark text-sm text-secondary">
+      <td className="py-3 px-4 border-b border-border-dark text-sm text-secondary">
         {getLastModified()}
+      </td>
+      <td className="py-3 px-4 border-b border-r border-border-dark text-sm text-secondary text-nowrap">
+        {getCreated()}
       </td>
     </tr>
   );

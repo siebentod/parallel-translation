@@ -26,6 +26,12 @@ export interface EditorSlice {
     color: 'red' | 'orange' | 'green' | null
   ) => void;
   getLineColors: (baseName: string, language: string) => LineColor[];
+  setLastPosition: (
+    baseName: string,
+    language: string,
+    leftPosition: number,
+    rightPosition: number
+  ) => void;
 }
 
 export const createEditorSlice: StateCreator<Store, [], [], EditorSlice> = (
@@ -194,5 +200,45 @@ export const createEditorSlice: StateCreator<Store, [], [], EditorSlice> = (
     if (!translation || !translation.languages[language]) return [];
 
     return translation.languages[language].lineColors || [];
+  },
+  setLastPosition: (baseName, language, leftPosition, rightPosition) => {
+    set((state) => {
+      const translation = get().translations[baseName];
+      if (!translation || !translation.languages[language]) return state;
+
+      const file = translation.languages[language];
+      const originalFile = translation.languages['original'];
+
+      const updatedTranslation = {
+        ...translation,
+        languages: {
+          ...translation.languages,
+          original: {
+            ...originalFile,
+            lastPosition: leftPosition,
+          },
+          [language]: {
+            ...file,
+            lastPosition: rightPosition,
+          },
+        },
+      };
+
+      const newTranslations = {
+        ...state.translations,
+        [baseName]: updatedTranslation,
+      };
+
+      storeFile.set('translations', newTranslations);
+      storeFile.save();
+
+      return {
+        ...state,
+        translations: {
+          ...state.translations,
+          [baseName]: updatedTranslation,
+        },
+      };
+    });
   },
 });

@@ -54,6 +54,7 @@ export const createInternalSlice: StateCreator<Store, [], [], InternalSlice> = (
         const shownName = existingTranslation?.shownName || baseName;
         const lastLanguage = existingTranslation?.lastLanguage || 'ru';
         const status = existingTranslation?.status || 'Новый';
+        const dateCreated = existingTranslation?.dateCreated || new Date().toISOString();
 
         // Определяем дату модификации - берем максимальную из файла и существующей записи
         const fileDateModified = entry.dateModified || new Date().toISOString();
@@ -84,6 +85,7 @@ export const createInternalSlice: StateCreator<Store, [], [], InternalSlice> = (
             shownName,
             lastLanguage,
             dateModified,
+            dateCreated,
             languages: {},
             availableLanguages: [],
             status,

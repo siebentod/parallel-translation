@@ -50,6 +50,5 @@ export function generateSlug(title: string, maxLength: number = 100): string {
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
 
-  // Ограничиваем длину
   return cleanedTitle.slice(0, maxLength);
 }

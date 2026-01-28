@@ -5,17 +5,20 @@ import { indentUnit } from '@codemirror/language';
 import { formattingKeys } from './extensions/formattingKeys';
 import { syncScroll } from './extensions/syncScroll';
 import { createLineColoringExtension } from './extensions/lineColoring';
+import { scrollToLine } from './extensions/scrollToLine';
 
 export function useCodeMirrorExtensions({
   editorId,
   partnerId,
   baseName,
   language,
+  initialLine,
 }: {
   editorId?: string;
   partnerId?: string;
   baseName?: string;
   language?: string;
+  initialLine?: number;
 }) {
   return useMemo(
     () =>
@@ -29,7 +32,8 @@ export function useCodeMirrorExtensions({
         baseName && language
           ? createLineColoringExtension(baseName, language)
           : [],
+        initialLine ? scrollToLine(initialLine) : [],
       ].flat(),
-    [baseName, editorId, language, partnerId]
+    [baseName, editorId, language, partnerId, initialLine]
   );
 }

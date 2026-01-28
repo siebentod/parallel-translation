@@ -12,7 +12,7 @@ export interface DataSlice {
   openTranslation: (baseName: string, language?: string) => Promise<void>;
   createTranslation: (
     shownName: string,
-    language: string,
+    language?: string,
     content?: string
   ) => Promise<{ success: boolean; error?: string }>;
   deleteTranslation: (baseName: string) => Promise<void>;
@@ -21,6 +21,15 @@ export interface DataSlice {
     newShownName: string
   ) => Promise<{ success: boolean; error?: string }>;
   editStatus: (oldBaseName: string, newStatus: string) => Promise<void>;
+  createNewLanguage: (
+    baseName: string,
+    language: string,
+    content?: string
+  ) => Promise<{ success: boolean; error?: string }>;
+  deleteOneLanguage: (
+    baseName: string,
+    language: string
+  ) => Promise<{ success: boolean; error?: string }>;
 }
 
 export const createDataSlice: StateCreator<Store, [], [], DataSlice> = (
@@ -99,11 +108,11 @@ export const createDataSlice: StateCreator<Store, [], [], DataSlice> = (
       toast.error('Ошибка открытия перевода');
     }
   },
-  createTranslation: async (shownName: string, language = 'ru') => {
+
+  createTranslation: async (shownName: string, language = '') => {
     try {
       const baseName = generateSlug(shownName);
       const originalName = `${baseName}-original.md`;
-      const translationName = `${baseName}-${language}.md`;
 
       if (get().translations[baseName]) {
         toast.error(`Перевод "${shownName}" уже существует`);
@@ -114,9 +123,14 @@ export const createDataSlice: StateCreator<Store, [], [], DataSlice> = (
       }
 
       const originalPath = `translations/${originalName}`;
-      const translationPath = `translations/${translationName}`;
       await saveFile(originalPath, '');
-      await saveFile(translationPath, '');
+
+      const translationName = language ? `${baseName}-${language}.md` : '';
+
+      if (language) {
+        const translationPath = `translations/${translationName}`;
+        await saveFile(translationPath, '');
+      }
 
       // Создаем запись в сторе
       const { translations } = get();
@@ -125,6 +139,7 @@ export const createDataSlice: StateCreator<Store, [], [], DataSlice> = (
         shownName,
         lastLanguage: language,
         dateModified: new Date().toISOString(),
+        dateCreated: new Date().toISOString(),
         languages: {
           original: {
             name: `${baseName}-original`,
@@ -133,15 +148,19 @@ export const createDataSlice: StateCreator<Store, [], [], DataSlice> = (
             language: 'original',
             lastPosition: 0,
           },
-          [language]: {
-            name: `${baseName}-${language}`,
-            fullName: translationName,
-            baseName,
-            language,
-            lastPosition: 0,
-          },
+          ...(language
+            ? {
+                [language]: {
+                  name: `${baseName}-${language}`,
+                  fullName: translationName,
+                  baseName,
+                  language,
+                  lastPosition: 0,
+                },
+              }
+            : {}),
         },
-        availableLanguages: [language],
+        availableLanguages: language ? [language] : [],
         status: 'Новый',
       };
 
@@ -158,6 +177,110 @@ export const createDataSlice: StateCreator<Store, [], [], DataSlice> = (
     } catch (error) {
       console.error(`Ошибка создания перевода ${shownName}:`, error);
       toast.error('Ошибка создания файла перевода');
+      return { success: false, error: 'Catch error' };
+    }
+  },
+
+  createNewLanguage: async (baseName: string, language: string) => {
+    const translation = get()._getTranslation(baseName);
+    if (!translation) {
+      toast.error(`Перевод "${baseName}" не найден`);
+      return { success: false, error: 'Перевод не найден' };
+    }
+    if (translation.languages[language]) {
+      toast.error(`Язык "${language}" уже существует`);
+      return { success: false, error: 'Язык уже существует' };
+    }
+
+    const name = `${baseName}-${language}`;
+    const fullName = `${name}.md`;
+
+    const updatedTranslation: Translation = {
+      ...translation,
+      languages: {
+        ...translation.languages,
+        [language]: {
+          name,
+          fullName,
+          baseName,
+          language,
+          lastPosition: 0,
+        },
+      },
+      availableLanguages: [...translation.availableLanguages, language],
+    };
+
+    const newTranslations = {
+      ...get().translations,
+      [baseName]: updatedTranslation,
+    };
+
+    await storeFile.set('translations', newTranslations);
+    await storeFile.save();
+    set({ translations: newTranslations });
+
+    const translationPath = `translations/${fullName}`;
+    await saveFile(translationPath, '');
+
+    return { success: true };
+  },
+
+  deleteOneLanguage: async (baseName: string, language: string) => {
+    try {
+      const translation = get()._getTranslation(baseName);
+      if (!translation) {
+        toast.error(`Перевод "${baseName}" не найден`);
+        return { success: false, error: 'Перевод не найден' };
+      }
+
+      if (language === 'original') {
+        toast.error('Нельзя удалить оригинальный файл');
+        return { success: false, error: 'Нельзя удалить оригинальный файл' };
+      }
+
+      if (!translation.languages[language]) {
+        toast.error(`Язык "${language}" не найден`);
+        return { success: false, error: 'Язык не найден' };
+      }
+
+      // Обновляем languages и availableLanguages
+      const newLanguages = { ...translation.languages };
+      delete newLanguages[language];
+
+      const newAvailableLanguages = translation.availableLanguages.filter(
+        (lang) => lang !== language
+      );
+
+      const updatedTranslation: Translation = {
+        ...translation,
+        languages: newLanguages,
+        availableLanguages: newAvailableLanguages,
+        dateModified: new Date().toISOString(),
+        // Если удаляемый язык был последним открытым, меняем на первый доступный
+        lastLanguage:
+          translation.lastLanguage === language
+            ? newAvailableLanguages[0]
+            : translation.lastLanguage,
+      };
+
+      const newTranslations = {
+        ...get().translations,
+        [baseName]: updatedTranslation,
+      };
+
+      await storeFile.set('translations', newTranslations);
+      await storeFile.save();
+      set({ translations: newTranslations });
+
+      // Удаляем файл языка
+      const filePath = `translations/${translation.languages[language].fullName}`;
+      await deleteFile(filePath);
+
+      toast.success(`Язык "${language}" удален`);
+      return { success: true };
+    } catch (error) {
+      console.error(`Ошибка удаления языка ${language}:`, error);
+      toast.error('Ошибка удаления языка');
       return { success: false, error: 'Catch error' };
     }
   },
@@ -295,12 +418,6 @@ export const createDataSlice: StateCreator<Store, [], [], DataSlice> = (
       await storeFile.save();
 
       set({ translations: newTranslations });
-
-      // Если удаляемый перевод открыт, закрываем его
-      const { currentTranslation } = get();
-      if (currentTranslation.baseName === baseName) {
-        get().closeCurrentTranslation();
-      }
 
       toast.success(`Перевод "${translation.shownName}" удален`);
     } catch (error) {

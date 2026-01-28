@@ -1,19 +1,20 @@
-import { useCallback, useMemo, useState } from 'react';
-import { useTextStore } from 'src/hooks/useTextStore';
 import { useModalStore } from 'src/hooks/useModalStore';
+import { useTextStore } from 'src/hooks/useTextStore';
+import { useTableSort } from './use-table-sort';
 
 import clsx from 'clsx';
 import Row from './row';
 import PlusSvg from 'assets/icons/Plus.svg?react';
 import ArrowToButton from 'src/components/ui/arrow-to-button';
 
-// Определяем приоритет статусов
-const statusPriority = {
-  Новый: 1,
-  'В процессе': 2,
-  Отложено: 3,
-  Готово: 4,
-};
+const columns = [
+  { key: 'empty', label: '' },
+  { key: 'shownName', label: 'Title' },
+  { key: 'status', label: 'Status' },
+  { key: 'languages', label: 'Translations' },
+  { key: 'lastModified', label: 'Last touched' },
+  { key: 'created', label: 'Created' },
+];
 
 function TranslationsTable() {
   const open = useModalStore((state) => state.open);
@@ -21,80 +22,8 @@ function TranslationsTable() {
   const translationsObj = useTextStore((state) => state.translations);
   const translationSets = Object.values(translationsObj);
 
-  const [sortColumn, setSortColumn] = useState('lastModified');
-  const [sortDirection, setSortDirection] = useState('desc');
-
-  // Мемоизируем отсортированные наборы переводов
-  const sortedTranslationSets = useMemo(() => {
-    if (!translationSets) return [];
-
-    return [...translationSets].sort((a, b) => {
-      // Сначала сортируем по статусу
-      const statusA = a.status ? statusPriority[a.status as keyof typeof statusPriority] : 999;
-      const statusB = b.status ? statusPriority[b.status as keyof typeof statusPriority] : 999;
-
-      if (statusA !== statusB) {
-        return statusA - statusB;
-      }
-
-      // Если статусы одинаковые, применяем основную сортировку
-      let valA, valB;
-
-      switch (sortColumn) {
-        case 'shownName':
-          valA = a.shownName.toLowerCase();
-          valB = b.shownName.toLowerCase();
-          break;
-        case 'lastModified':
-          valA = a.dateModified;
-          valB = b.dateModified;
-          break;
-        case 'fileCount':
-          valA = a.availableLanguages.length;
-          valB = b.availableLanguages.length;
-          break;
-        default:
-          valA = a.dateModified;
-          valB = b.dateModified;
-      }
-
-      if (sortColumn === 'lastModified' || sortColumn === 'fileCount') {
-        // Для дат и чисел
-        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
-        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
-        return 0;
-      } else {
-        // Для строк
-        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
-        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
-        return 0;
-      }
-    });
-  }, [translationSets, sortColumn, sortDirection]);
-
-  const getSortIcon = useCallback(
-    (column: string) => {
-      if (sortColumn === column) {
-        return sortDirection === 'asc' ? '▲' : '▼';
-      }
-      return '';
-    },
-    [sortColumn, sortDirection]
-  );
-
-  const handleSort = useCallback((column: string) => {
-    setSortColumn((prevColumn) => {
-      if (prevColumn === column) {
-        setSortDirection((prevDirection) =>
-          prevDirection === 'asc' ? 'desc' : 'asc'
-        );
-        return prevColumn;
-      } else {
-        setSortDirection('asc');
-        return column;
-      }
-    });
-  }, []);
+  const { sortedTranslationSets, handleSort, getSortIcon } =
+    useTableSort(translationSets);
 
   if (!isDataLoaded) {
     return (
@@ -110,13 +39,7 @@ function TranslationsTable() {
         <table className="bg-surface shadow-sm mx-auto md:min-w-2xl">
           <thead className="bg-red-bg">
             <tr className="border border-border-dark text-left text-sm font-semibold text-black uppercase tracking-wider text-nowrap">
-              {[
-                { key: 'empty', label: '' },
-                { key: 'shownName', label: 'Title' },
-                { key: 'status', label: 'Status' },
-                { key: 'languages', label: 'Translations' },
-                { key: 'lastModified', label: 'Last touched' },
-              ].map((col) => (
+              {columns.map((col) => (
                 <th
                   key={col.key}
                   className={clsx(
@@ -124,7 +47,7 @@ function TranslationsTable() {
                     col.key !== 'languages' &&
                       col.key !== 'empty' &&
                       'cursor-pointer',
-                    col.key !== 'empty' && 'py-3 px-4'
+                    col.key !== 'empty' && 'py-3 px-4',
                   )}
                   onClick={() =>
                     col.key !== 'languages' &&

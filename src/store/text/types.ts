@@ -8,6 +8,7 @@ export interface Translation {
   shownName: string;
   lastLanguage: string;
   dateModified: string;
+  dateCreated: string;
   languages: Record<string, TranslationFile>; // { 'original': file, 'ru': file, 'en': file, etc. }
   availableLanguages: string[];
   status?: string;

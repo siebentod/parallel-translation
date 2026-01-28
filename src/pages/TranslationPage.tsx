@@ -9,7 +9,6 @@ export default function TranslationPage() {
 
   useEffect(() => {
     if (basename && language && isDataLoaded) {
-      // Открываем перевод при загрузке страницы
       openTranslation(basename, language);
     }
   }, [basename, language, openTranslation, isDataLoaded]);

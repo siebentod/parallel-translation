@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="relative w-fit mx-auto">
       <div className="mx-auto font-inter max-h-screen relative">
-        <div className="pt-4">
+        <div className="xl:pt-4">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/translation/:basename/:language" element={<TranslationPage />} />
