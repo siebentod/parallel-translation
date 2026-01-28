@@ -1,12 +1,13 @@
 # ParallelTranslation
 
-A cross-platform application (desktop and web) for parallel text translation with Markdown editing capabilities.
+Desktop/Web application for parallel text translation with Markdown editing.
 
 ## Features
-- Markdown text editor with CodeMirror
-- Parallel translation sections
-- File management and auto-save
-- Responsive UI
+- В браузерной версии данные хранятся в браузере. Когда-нибудь возможна синхронизация по личному аккаунту.
+- Работает Markdown разметка. В Desktop версии переводы хранятся как обычные md-файлы.
+- Текст сохраняется по вводу с задержкой 1 сек. и мгновенно при выходе (через кнопку).
+- При нажатии левой кнопкой мыши на номер строки, происходит скролл противоположного окна к соответствующей строке.
+- Нажатием правой кнопкой мыши на номер можно помечать строку цветом.
 
 ## Installation
 1. Clone the repo: `git clone https://github.com/siebentod/paralleltranslation.git`
