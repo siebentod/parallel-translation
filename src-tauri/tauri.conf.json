@@ -15,7 +15,9 @@
         "title": "ParallelTranslation",
         "resizable": true,
         "fullscreen": false,
-        "dragDropEnabled": false
+        "dragDropEnabled": false,
+        "width": 1000,
+        "height": 600
       }
     ],
     "security": {
