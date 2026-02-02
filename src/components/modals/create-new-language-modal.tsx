@@ -1,7 +1,9 @@
 import Modal, { type ModalProps } from 'src/components/ui/modal';
 import Button from 'src/components/ui/button';
 
-export interface CreateNewLanguageModalProps extends ModalProps {}
+export interface CreateNewLanguageModalProps extends ModalProps {
+  currentName?: string;
+}
 
 export function CreateNewLanguageModal({
   isOpen,
@@ -10,7 +12,7 @@ export function CreateNewLanguageModal({
 }: CreateNewLanguageModalProps) {
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Введите код языка">
+    <Modal isOpen={isOpen} onClose={onClose} title="Enter language code">
       <form onSubmit={onSubmit}>
         <input
           type="text"
@@ -23,10 +25,10 @@ export function CreateNewLanguageModal({
         />
         <div className="flex justify-center mt-4 gap-2">
           <Button type="submit" primary>
-            Создать
+            Create
           </Button>
           <Button type="button" onClick={onClose}>
-            Назад
+            Back
           </Button>
         </div>
       </form>

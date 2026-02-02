@@ -10,7 +10,7 @@ export function CreateTranslationModal({
 }: CreateTranslationModalProps) {
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Введите название">
+    <Modal isOpen={isOpen} onClose={onClose} title="Enter title">
       <form onSubmit={onSubmit}>
         <input
           type="text"
@@ -22,10 +22,10 @@ export function CreateTranslationModal({
         />
         <div className="flex justify-center mt-4 gap-2">
           <Button type="submit" primary>
-            Создать
+            Create
           </Button>
           <Button type="button" onClick={onClose}>
-            Назад
+            Back
           </Button>
         </div>
       </form>

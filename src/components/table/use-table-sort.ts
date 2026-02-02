@@ -2,10 +2,10 @@ import { useCallback, useMemo, useState } from 'react';
 import type { Translation } from 'src/store/text/types';
 
 const statusPriority = {
-  Новый: 1,
-  'В процессе': 2,
-  Отложено: 3,
-  Готово: 4,
+  New: 1,
+  InProgress: 2,
+  Hold: 3,
+  Finished: 4,
 };
 
 export function useTableSort(translationSets: Translation[] | null) {

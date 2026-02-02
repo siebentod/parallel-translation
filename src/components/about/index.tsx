@@ -76,25 +76,17 @@ export default function About() {
           </button>
         </div>
 
-        {/* Содержимое */}
+        {/* Content */}
         <div className="text-text-primary">
           <p className="mb-0">
-            — Текст сохраняется по вводу с задержкой 1 сек. и мгновенно при
-            выходе (через кнопку).
+            — Text is saved on input with a 1-second delay, and immediately when exiting (via button).
           </p>
           <p className="mb-0">
-            — В браузерной версии данные сохраняются в браузере. Когда-нибудь возможна
-            синхронизация по личному аккаунту.
+            — Click a line number to scroll the opposite window to the corresponding line.
           </p>
           <p className="mb-0">
-            — Работает Markdown разметка.
-          </p>
-          <p className="mb-0">
-            — При нажатии левой кнопкой мыши на номер строки, происходит скролл противоположного окна к соответствующей строке.
-          </p>
-          <p className="mb-0">
-           — Нажатием правой кнопкой мыши на номер можно помечать строку
-            цветом.
+           — Right-click on a line number to mark the line
+            with color.
           </p>
         </div>
       </div>

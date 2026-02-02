@@ -12,7 +12,7 @@ export function RenameModal({
   currentName,
 }: RenameModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Переименовать">
+    <Modal isOpen={isOpen} onClose={onClose} title="Rename">
       <form onSubmit={onSubmit}>
         <input
           type="text"
@@ -25,10 +25,10 @@ export function RenameModal({
         />
         <div className="flex justify-center mt-4 gap-2">
           <Button type="submit" primary>
-            Переименовать
+            Rename
           </Button>
           <Button type="button" onClick={onClose}>
-            Назад
+            Back
           </Button>
         </div>
       </form>

@@ -23,7 +23,7 @@ function TranslationRow({ translationSet }: TranslationRowProps) {
             to={`/translation/${translationSet.baseName}/${lang}`}
             key={lang}
             className="px-2 py-1 text-xs font-bold bg-red-bg text-black rounded-sm hover:bg-red-bg-hover transition-colors"
-            title={`Открыть перевод на ${lang}`}
+            title={`Open translation in ${lang}`}
           >
             {lang}
           </Link>
@@ -103,14 +103,14 @@ function TranslationRow({ translationSet }: TranslationRowProps) {
       >
         <div
           className={`font-medium ${
-            translationSet.status === 'Готово'
+            translationSet.status === 'Finished'
               ? 'text-info'
-              : translationSet.status === 'Отложено'
+              : translationSet.status === 'Hold'
               ? 'text-warning'
               : 'text-success'
           }`}
         >
-          {translationSet.status || 'Новый'}
+          {translationSet.status || 'New'}
         </div>
       </td>
       <td className="py-3 px-4 border-b border-border-dark">

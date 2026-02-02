@@ -7,7 +7,7 @@ export interface StatusModalProps extends ModalProps {
 
 export function StatusModal({ isOpen, onClose, onSubmit, currentStatus }: StatusModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Статус">
+    <Modal isOpen={isOpen} onClose={onClose} title="Status">
       <form onSubmit={onSubmit}>
         <select
           className="border border-border-light rounded-md mx-auto block px-3 py-2 w-full mt-4 bg-input-dark focus:outline-none"
@@ -15,16 +15,16 @@ export function StatusModal({ isOpen, onClose, onSubmit, currentStatus }: Status
           defaultValue={currentStatus}
           required
         >
-          <option className="hover:bg-amber-100" value="Новый">Новый</option>
-          <option value="Готово">Готово</option>
-          <option value="Отложено">Отложено</option>
+          <option className="hover:bg-amber-100" value="New">New</option>
+          <option value="Finished">Finished</option>
+          <option value="Hold">Hold</option>
         </select>
         <div className="flex justify-center mt-4 gap-2">
           <Button type="submit" primary>
-            Изменить статус
+            Change status
           </Button>
           <Button type="button" onClick={onClose}>
-            Назад
+            Back
           </Button>
         </div>
       </form>

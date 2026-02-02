@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 interface ButtonProps {
   primary?: boolean;
+  type?: 'button' | 'submit' | 'reset';
   onClick?: () => void | Promise<void>;
   loading?: boolean;
   children: React.ReactNode;

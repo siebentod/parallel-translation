@@ -18,7 +18,7 @@ export const modalStore = create<ModalStore>((set, get) => ({
     set((state) => ({
       modals: { ...state.modals, [name]: true },
       modalValues: { ...state.modalValues, [name]: value },
-    })),
+    })), // Единственное, что используется в компонентах
   close: (name) =>
     set((state) => {
       const newModalValues = { ...state.modalValues };

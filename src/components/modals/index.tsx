@@ -8,6 +8,7 @@ import { CreateNewLanguageModal } from 'src/components/modals/create-new-languag
 import { DeleteOneLanguage } from 'src/components/modals/delete-one-language';
 import { useNavigate } from 'react-router-dom';
 
+// It is not ideal but it works well...
 export default function Modals() {
   const {
     createTranslation,
@@ -21,30 +22,17 @@ export default function Modals() {
 
   const close = useModalStore((state) => state.close);
 
-  const isCreateTranslationOpen = useModalStore(
-    (state) => !!state.modals['create-translation']
-  );
-  const isRenameOpen = useModalStore((state) => !!state.modals.rename);
-  const isStatusOpen = useModalStore((state) => !!state.modals.status);
-  const isDeleteOpen = useModalStore((state) => !!state.modals.delete);
-  const isCreateNewLanguageOpen = useModalStore((state) => !!state.modals['create-new-language']);
-  const isDeleteOneLanguageOpen = useModalStore((state) => !!state.modals['delete-one-language']);
+  const getModalData = (name: string) => ({
+    isOpen: useModalStore((state) => !!state.modals[name]),
+    value: useModalStore((state) => state.modalValues[name])
+  });
 
-  const statusModalValue = useModalStore(
-    (state) => state.modalValues.status
-  );
-  const renameModalValue = useModalStore(
-    (state) => state.modalValues.rename
-  );
-  const deleteModalValue = useModalStore(
-    (state) => state.modalValues.delete
-  );
-  const createNewLanguageModalValue = useModalStore(
-    (state) => state.modalValues['create-new-language']
-  );
-  const deleteOneLanguageModalValue = useModalStore(
-    (state) => state.modalValues['delete-one-language']
-  );
+  const createTranslationData = getModalData('create-translation');
+  const renameData = getModalData('rename');
+  const statusData = getModalData('status');
+  const deleteData = getModalData('delete');
+  const createNewLanguageData = getModalData('create-new-language');
+  const deleteOneLanguageData = getModalData('delete-one-language');
 
   const submitModalNewTranslation = async (e) => {
     e.preventDefault();
@@ -56,7 +44,7 @@ export default function Modals() {
 
   const submitModalRename = async (e) => {
     e.preventDefault();
-    const baseName = renameModalValue?.name;
+    const baseName = renameData.value?.name;
     const newShownName = e.target.shownName.value;
     if (!newShownName || !baseName) return;
     const { success } = await renameTranslation(baseName, newShownName);
@@ -65,7 +53,7 @@ export default function Modals() {
 
   const submitModalEditStatus = (e) => {
     e.preventDefault();
-    const baseName = statusModalValue?.name;
+    const baseName = statusData.value?.name;
     const newStatus = e.target.status.value;
     if (!newStatus || !baseName) return;
     editStatus(baseName, newStatus);
@@ -73,7 +61,7 @@ export default function Modals() {
   };
 
   const submitModalDeleteTranslation = () => {
-    const baseName = deleteModalValue?.name;
+    const baseName = deleteData.value?.name;
     if (!baseName) return;
     deleteTranslation(baseName);
     close('delete');
@@ -81,16 +69,16 @@ export default function Modals() {
 
   const submitModalCreateNewLanguage = async (e) => {
     e.preventDefault();
-    const baseName = createNewLanguageModalValue?.name;
+    const baseName = createNewLanguageData.value?.name;
     const language = e.target.language.value;
-    if (!language || !baseName ) return;
+    if (!language || !baseName) return;
     const { success } = await createNewLanguage(baseName, language);
     if (success) close('create-new-language');
   };
 
   const submitModalDeleteOneLanguage = async () => {
-    const baseName = deleteOneLanguageModalValue?.name;
-    const language = deleteOneLanguageModalValue?.value;
+    const baseName = deleteOneLanguageData.value?.name;
+    const language = deleteOneLanguageData.value?.value;
     if (!language || !baseName) return;
     const { success } = await deleteOneLanguage(baseName, language);
     if (success) close('delete-one-language');
@@ -100,45 +88,45 @@ export default function Modals() {
   return (
     <>
       <DeleteModal
-        isOpen={isDeleteOpen}
+        isOpen={deleteData.isOpen}
         onClose={() => close('delete')}
         onSubmit={submitModalDeleteTranslation}
-        currentName={deleteModalValue?.value}
+        currentName={deleteData.value?.value}
       />
 
       <CreateTranslationModal
-        isOpen={isCreateTranslationOpen}
+        isOpen={createTranslationData.isOpen}
         onClose={() => close('create-translation')}
         onSubmit={submitModalNewTranslation}
       />
 
       <RenameModal
-        isOpen={isRenameOpen}
+        isOpen={renameData.isOpen}
         onClose={() => close('rename')}
         onSubmit={submitModalRename}
-        currentName={renameModalValue?.value}
+        currentName={renameData.value?.value}
       />
 
       <StatusModal
-        isOpen={isStatusOpen}
+        isOpen={statusData.isOpen}
         onClose={() => close('status')}
         onSubmit={submitModalEditStatus}
-        currentStatus={statusModalValue?.value}
+        currentStatus={statusData.value?.value}
       />
 
       <CreateNewLanguageModal
-        isOpen={isCreateNewLanguageOpen}
+        isOpen={createNewLanguageData.isOpen}
         onClose={() => close('create-new-language')}
         onSubmit={submitModalCreateNewLanguage}
-        currentName={createNewLanguageModalValue?.name}
+        currentName={createNewLanguageData.value?.name}
       />
 
       <DeleteOneLanguage
-        isOpen={isDeleteOneLanguageOpen}
+        isOpen={deleteOneLanguageData.isOpen}
         onClose={() => close('delete-one-language')}
         onSubmit={submitModalDeleteOneLanguage}
-        baseName={deleteOneLanguageModalValue?.name}
-        language={deleteOneLanguageModalValue?.value}
+        baseName={deleteOneLanguageData.value?.name}
+        language={deleteOneLanguageData.value?.value}
       />
     </>
   );

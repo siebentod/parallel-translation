@@ -16,7 +16,7 @@ export default function TranslationPage() {
   if (!isDataLoaded) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="text-gray-500">Загрузка переводов...</div>
+        <div className="text-gray-500">Loading translations...</div>
       </div>
     );
   }

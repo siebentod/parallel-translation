@@ -28,7 +28,7 @@ function TranslationsTable() {
   if (!isDataLoaded) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="text-gray-500">Загрузка переводов...</div>
+        <div className="text-gray-500">Loading translations...</div>
       </div>
     );
   }
@@ -76,13 +76,13 @@ function TranslationsTable() {
               <tr>
                 <td colSpan={5} className="text-center py-12 text-gray-500">
                   <div className="space-y-2">
-                    <div className="text-xl">Переводы не найдены</div>
+                    <div className="text-xl">No translations found</div>
                     <ArrowToButton />
                     <div
                       className="text-base text-gray-400 w-max mx-auto"
                       id="add-translation-text"
                     >
-                      Создайте свой первый перевод!
+                      Create your first translation!
                     </div>
                   </div>
                 </td>

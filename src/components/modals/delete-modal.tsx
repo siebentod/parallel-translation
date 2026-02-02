@@ -7,15 +7,15 @@ export interface DeleteModalProps extends ModalProps {
 
 export function DeleteModal({ isOpen, onClose, onSubmit, currentName }: DeleteModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={`Удалить ${currentName}`}>
+    <Modal isOpen={isOpen} onClose={onClose} title={`Delete ${currentName}`}>
       <p className="mx-auto text-center max-w-[400px]">
-        Данное действие необратимо. Вы уверены?
+        This action is irreversible. Are you sure?
       </p>
       <div className="flex justify-center mt-4 gap-2">
         <Button onClick={onSubmit} primary>
-          Да
+          Yes
         </Button>
-        <Button onClick={onClose}>Назад</Button>
+        <Button onClick={onClose}>Back</Button>
       </div>
     </Modal>
   );

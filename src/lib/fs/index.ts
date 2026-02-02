@@ -1,8 +1,8 @@
 import type { IFileSystem } from './types';
 
 // 🔥 Переключение импортов вручную для browser/desktop билда
-import { BrowserFileSystem as FileSystemClass } from './browser-fs';
-// import { TauriFileSystem as FileSystemClass } from './tauri-fs';
+// import { BrowserFileSystem as FileSystemClass } from './browser-fs';
+import { TauriFileSystem as FileSystemClass } from './tauri-fs';
 
 // 🔥 Не билдящееся решение из-за top-level await. К сожалению проще вручную переключать импорты
 // const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;

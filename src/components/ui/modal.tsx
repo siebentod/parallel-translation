@@ -12,7 +12,7 @@ interface BaseModalProps {
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: () => void | Promise<void>;
+  onSubmit?: (...args: any[]) => void | Promise<void>;
 }
 
 export default function Modal({
