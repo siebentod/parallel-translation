@@ -8,8 +8,8 @@ Desktop/Web application for parallel text translation with Markdown editing.
 - При нажатии левой кнопкой мыши на номер строки, происходит скролл противоположного окна к соответствующей строке.
 - Нажатием правой кнопкой мыши на номер можно помечать строку цветом.
 - В браузерной версии данные хранятся в браузере. Когда-нибудь возможна синхронизация по личному аккаунту.
-- Переводы в формате md хранятся по адресу 'Документы\ParallelTranslation\translations' (доступны для изменения извне).
-- Настройки приложения хранятся в 'AppData\Roaming\parallel-translation'
+- Переводы в формате md хранятся по адресу `Документы\ParallelTranslation\translations` (доступны для изменения извне).
+- Настройки приложения хранятся в `AppData\Roaming\parallel-translation`
 
 ## Installation
 1. Clone the repo: `git clone https://github.com/siebentod/paralleltranslation.git`
