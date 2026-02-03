@@ -2,6 +2,19 @@
 
 Desktop/Web application for parallel text translation with Markdown editing.
 
+## Screenshots
+
+<table style="width:100%;border-collapse:collapse;">
+	<tr>
+		<td style="width:50%;padding:4px;vertical-align:top;">
+			<img src="public/screenshots/paralleltranslation-1.png" alt="ParallelTranslation - Main view" style="width:100%;height:auto;" />
+		</td>
+		<td style="width:50%;padding:4px;vertical-align:top;">
+			<img src="public/screenshots/paralleltranslation-2.png" alt="ParallelTranslation - Markdown view" style="width:100%;height:auto;" />
+		</td>
+	</tr>
+</table>
+
 ## Features
 - Markdown разметка. В Desktop версии переводы хранятся как обычные md-файлы.
 - Текст сохраняется по вводу с задержкой 1 сек. и мгновенно при выходе (через кнопку).
